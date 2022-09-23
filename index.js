@@ -23,9 +23,10 @@ class State {
 const state = new State();
 
 function renderResult(todos) {
+    console.log(todos.length);
     if (todos.length === 0) {
         console.log(todos.length);
-        todoResult.innerHTML = `<div>no active task</div>`;
+        todoResult.innerHTML = "<div>no active task</div>";
     }
 }
 
@@ -46,14 +47,16 @@ function submitEvent() {
     todoForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const todoTitle = inputData.value;
-        postItem(todoTitle);
-        getItem();
-        inputData.value = "";
+        if (todoTitle.length !== 0) {
+            postItem(todoTitle)
+            .then(() => getItem());
+        }
+        todoForm.reset();
     })
 }
 
-function postItem(todoTitle) {
-    fetch("http://localhost:3000/todos", {
+async function postItem(todoTitle) {
+    await fetch("http://localhost:3000/todos", {
         method: "POST",
         body: JSON.stringify({
             title: todoTitle,
@@ -80,8 +83,11 @@ function editItemHandler(id) {
     const editTitle = document.getElementById(`${id}__title__edit`);
     title.style.display = title.style.display == "none" ? "block" : "none";
     editTitle.style.display = editTitle.style.display == "block" ? "none" : "block";
+    // editTitle.setAttribute("value", `${title.textContent}`);
     const editedInput = editTitle.value;
-    editItem(id, editedInput);
+    if (editedInput !== "") {
+        editItem(id, editedInput);
+    }
 }
 
 function editItem(id, todoTitle) {
@@ -95,19 +101,21 @@ function editItem(id, todoTitle) {
             'Content-type': 'application/json; charset=UTF-8'
         }
     })
+    .then(() => getItem());
 }
 
 function deleteItemHandler(id) {
     fetch(`http://localhost:3000/todos/${id}`, {
         method: "DELETE"
     })
-    getItem();
+    .then(() => {
+        getItem();
+    })
 }
 
 todoFormSubmit.addEventListener('click', submitEvent());
 
 (() => {
-    // renderResult(state.todos);
     getItem();
 })()
 
