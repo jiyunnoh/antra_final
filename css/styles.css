@@ -54,6 +54,11 @@ body {
     align-content: space-between;
 }
 
+.todo__click--toggle {
+    color: gray;
+    text-decoration: line-through;
+}
+
 .todo__title, .todo__title__edit {
     flex-basis: 70%;
 }

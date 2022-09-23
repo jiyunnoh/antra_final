@@ -33,7 +33,7 @@ function renderResult(todos) {
 function renderTodos(todos) {
     const todoInnerHTML = todos.map(todo => {
         return `<article class="todo">
-            <div class="todo__title" id="${todo.id}__title">${todo.title}</div>
+            <div class="todo__title" id="${todo.id}__title" onClick="completeHandler(${todo.id})">${todo.title}</div>
             <input class="todo__title__edit" id="${todo.id}__title__edit" />
             <button class="todo__edit" onClick="editItemHandler(${todo.id})">${editIcon}</button>
             <button class="todo__delete" onClick="deleteItemHandler(${todo.id})">${deleteIcon}</button>
@@ -41,6 +41,11 @@ function renderTodos(todos) {
     }).join("");
 
     todoContainer.innerHTML = todoInnerHTML;
+}
+
+function completeHandler(id) {
+    const clicked = document.getElementById(`${id}__title`);
+    clicked.classList.toggle("todo__click--toggle");
 }
 
 function submitEvent() {
@@ -55,11 +60,11 @@ function submitEvent() {
     })
 }
 
-async function postItem(todoTitle) {
+async function postItem(title) {
     await fetch("http://localhost:3000/todos", {
         method: "POST",
         body: JSON.stringify({
-            title: todoTitle,
+            title,
             completed: false
         }),
         headers: {
@@ -90,11 +95,11 @@ function editItemHandler(id) {
     }
 }
 
-function editItem(id, todoTitle) {
+function editItem(id, title) {
     fetch(`http://localhost:3000/todos/${id}`, {
         method: "PUT",
         body: JSON.stringify({
-            title: todoTitle,
+            title,
             completed: false
         }),
         headers: {
