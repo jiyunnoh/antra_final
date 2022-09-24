@@ -19,7 +19,7 @@ body {
     border: 3px solid #e6e2d3;
     border-radius: 10px;
     padding: 1rem;
-    height: 500px;
+    min-height: 500px;
 }
 
 .todo-form__input {
@@ -52,6 +52,8 @@ body {
     display: flex;
     gap: 5px;
     align-content: space-between;
+    justify-content: center;
+    align-items: center;
 }
 
 .todo__click--toggle {
